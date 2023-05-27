@@ -34,11 +34,9 @@ export class MainScene extends Phaser.Scene {
   update(time: number, delta: number) {
     this.timeElapsed += delta;
 
-    // Update velocities every 2 seconds (adjust the interval as desired)
     if (this.timeElapsed >= 2000) {
       this.timeElapsed = 0;
   
-      // Randomize the velocity of square1
       this.naFabhtRead.forEach(fabht => {
         const randomVelocity1X = Phaser.Math.Between(-500, 500);
         const randomVelocity1Y = Phaser.Math.Between(-500, 500)
