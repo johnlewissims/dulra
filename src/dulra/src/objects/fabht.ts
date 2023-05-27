@@ -1,10 +1,10 @@
 import { IImageConstructor } from '../interfaces/image.interface';
 
-export class Redhat extends Phaser.GameObjects.Image {
+export class Fabht extends Phaser.GameObjects.Rectangle {
   body: Phaser.Physics.Arcade.Body;
 
   constructor(aParams: IImageConstructor) {
-    super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame);
+    super(aParams.scene, aParams.x, aParams.y, aParams.width, aParams.height, aParams.fillColor);
 
     this.initSprite();
     this.initPhysics();

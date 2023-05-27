@@ -1,33 +1,23 @@
-import { Redhat } from '../objects/redhat';
+import { Fabht } from '../objects/fabht';
 
 export class MainScene extends Phaser.Scene {
-  private myRedhat: Redhat;
+  private myFabht: Fabht;
 
   constructor() {
     super({ key: 'MainScene' });
   }
 
   preload(): void {
-    this.load.image('redhat', '../assets/redhat.png');
-    this.load.image('redParticle', '../assets/red.png');
   }
 
   create(): void {
-    const particles = this.add.particles('redParticle');
-
-    const emitter = particles.createEmitter({
-      speed: 100,
-      scale: { start: 0.5, end: 0 },
-      blendMode: 'ADD'
-    });
-
-    this.myRedhat = new Redhat({
+    this.myFabht = new Fabht({
       scene: this,
       x: 400,
       y: 300,
-      texture: 'redhat'
+      width: 40,
+      height: 40,
+      fillColor: 0xE0FF4F
     });
-
-    emitter.startFollow(this.myRedhat);
   }
 }
