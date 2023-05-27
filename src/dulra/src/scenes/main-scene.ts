@@ -1,11 +1,12 @@
 import { Fabht } from '../objects/fabht';
 import { FabhtConstructor } from '../interfaces/fabht.interface';
+import { FabhtPhysics } from '../Helpers/Physics/fabhtPhysics';
 
 export class MainScene extends Phaser.Scene {
   private naFabht: Array<FabhtConstructor>;
   private naFabhtRead: Array<Fabht>;
   private timeElapsed: number = 0;
-  private velocityTweenDuration: number = 1000;
+  private fabhtPhysics: FabhtPhysics = new FabhtPhysics();
 
   constructor(naFabht: Array<FabhtConstructor>) {
     super({ key: 'MainScene' });
@@ -26,9 +27,12 @@ export class MainScene extends Phaser.Scene {
         height: fabht.height,
         fillColor: fabht.fillColor,
         xVelocity: fabht.xVelocity,
-        yVelocity: fabht.yVelocity
+        yVelocity: fabht.yVelocity,
+        attraction: fabht.attraction
       }, this,));
     }
+
+    this.fabhtPhysics.applyAttraction(this.naFabhtRead);
   }
 
   update(time: number, delta: number) {
@@ -36,19 +40,7 @@ export class MainScene extends Phaser.Scene {
 
     if (this.timeElapsed >= 2000) {
       this.timeElapsed = 0;
-  
-      this.naFabhtRead.forEach(fabht => {
-        const randomVelocity1X = Phaser.Math.Between(-500, 500);
-        const randomVelocity1Y = Phaser.Math.Between(-500, 500)
-        
-        this.tweens.add({
-          targets: fabht.body.velocity,
-          x: randomVelocity1X,
-          y: randomVelocity1Y,
-          duration: this.velocityTweenDuration,
-          ease: 'Linear',
-        });
-      });
+      this.fabhtPhysics.varySpeed(this.naFabhtRead, this.tweens);
     }
   }
 

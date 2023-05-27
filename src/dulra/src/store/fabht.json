@@ -5,8 +5,9 @@
         "width": 50,
         "height": 50,
         "fillColor": "0xE0FF4F",
-        "xVelocity": 200,
-        "yVelocity": -200
+        "xVelocity": 30,
+        "yVelocity": -30,
+        "attraction": 1300
     },
     {
         "x": 100,
@@ -14,8 +15,9 @@
         "width": 30,
         "height": 40,
         "fillColor": "0x19647E",
-        "xVelocity": -250,
-        "yVelocity": 200
+        "xVelocity": -30,
+        "yVelocity": 30,
+        "attraction": 30
     },
     {
         "x": 150,
@@ -23,7 +25,8 @@
         "width": 50,
         "height": 20,
         "fillColor": "0xFF6663",
-        "xVelocity": 250,
-        "yVelocity": 200
+        "xVelocity": 30,
+        "yVelocity": 30,
+        "attraction": 50
     }
 ]

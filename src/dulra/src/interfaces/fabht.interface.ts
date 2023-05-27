@@ -4,6 +4,7 @@ export interface FabhtConstructor {
   width: number;
   height: number;
   fillColor: string;
-  xVelocity: number
-  yVelocity: number
+  xVelocity: number;
+  yVelocity: number;
+  attraction: number;
 }
