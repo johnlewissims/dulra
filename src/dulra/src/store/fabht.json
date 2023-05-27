@@ -1,32 +1,35 @@
 [
     {
-        "x": 1,
-        "y": 2,
+        "id": 0,
+        "x": 500,
+        "y": 500,
         "width": 50,
         "height": 50,
         "fillColor": "0xE0FF4F",
-        "xVelocity": 30,
-        "yVelocity": -30,
-        "attraction": 1300
+        "xVelocity": -25,
+        "yVelocity": 25,
+        "attraction": 0
     },
     {
-        "x": 100,
+        "id": 1,
+        "x": 120,
         "y": 200,
         "width": 30,
         "height": 40,
         "fillColor": "0x19647E",
-        "xVelocity": -30,
-        "yVelocity": 30,
-        "attraction": 30
+        "xVelocity": 25,
+        "yVelocity": -25,
+        "attraction": 3000
     },
     {
+        "id": 2,
         "x": 150,
         "y": 200,
         "width": 50,
         "height": 20,
         "fillColor": "0xFF6663",
-        "xVelocity": 30,
-        "yVelocity": 30,
-        "attraction": 50
+        "xVelocity": -25,
+        "yVelocity": -25,
+        "attraction": 0
     }
 ]

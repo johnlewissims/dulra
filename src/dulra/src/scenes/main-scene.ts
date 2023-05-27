@@ -21,6 +21,7 @@ export class MainScene extends Phaser.Scene {
   create(): void {
     for (const [key, fabht] of Object.entries(this.naFabht)) {
       this.naFabhtRead.push(new Fabht({
+        id: fabht.id,
         x: fabht.x,
         y: fabht.y,
         width: fabht.width,
@@ -31,8 +32,6 @@ export class MainScene extends Phaser.Scene {
         attraction: fabht.attraction
       }, this,));
     }
-
-    this.fabhtPhysics.applyAttraction(this.naFabhtRead);
   }
 
   update(time: number, delta: number) {

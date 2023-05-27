@@ -1,4 +1,5 @@
 export interface FabhtConstructor {
+  id: number;
   x: number;
   y: number;
   width: number;
