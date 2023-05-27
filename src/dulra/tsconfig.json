@@ -3,7 +3,9 @@
     "target": "ES6",
     "module": "CommonJS",
     "moduleResolution": "node",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

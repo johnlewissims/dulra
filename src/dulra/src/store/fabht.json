@@ -1,0 +1,20 @@
+[
+    {
+        "x": 1,
+        "y": 2,
+        "width": 50,
+        "height": 50,
+        "fillColor": "0xE0FF4F",
+        "xVelocity": 200,
+        "yVelocity": 200
+    },
+    {
+        "x": 100,
+        "y": 200,
+        "width": 30,
+        "height": 40,
+        "fillColor": "0xE0FF4F",
+        "xVelocity": 250,
+        "yVelocity": 200
+    }
+]

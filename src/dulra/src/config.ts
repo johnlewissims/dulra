@@ -1,4 +1,7 @@
 import { MainScene } from './scenes/main-scene';
+import * as store from './store/fabht.json';
+
+const mainScene = new MainScene(store);
 
 export const GameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Webpack-Boilerplate',
@@ -12,8 +15,8 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 200 }
+      gravity: { y: 0 }
     }
   },
-  scene: [MainScene]
+  scene: [mainScene]
 };

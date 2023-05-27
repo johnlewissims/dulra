@@ -1,23 +1,29 @@
 import { Fabht } from '../objects/fabht';
+import { FabhtConstructor } from '../interfaces/fabht.interface';
 
 export class MainScene extends Phaser.Scene {
-  private myFabht: Fabht;
+  private naFabht: Array<FabhtConstructor>;
 
-  constructor() {
+  constructor(naFabht: Array<FabhtConstructor>) {
     super({ key: 'MainScene' });
+    this.naFabht = naFabht;
   }
 
   preload(): void {
+    
   }
 
   create(): void {
-    this.myFabht = new Fabht({
-      scene: this,
-      x: 400,
-      y: 300,
-      width: 40,
-      height: 40,
-      fillColor: 0xE0FF4F
-    });
+    for (const [key, fabht] of Object.entries(this.naFabht)) {
+      new Fabht({
+        x: fabht.x,
+        y: fabht.y,
+        width: fabht.width,
+        height: fabht.height,
+        fillColor: fabht.fillColor,
+        xVelocity: fabht.xVelocity,
+        yVelocity: fabht.yVelocity
+      }, this,); 
+    }
   }
 }
