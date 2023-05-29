@@ -1,11 +1,12 @@
 import { Body } from 'matter';
 import { Fabht } from '../../objects/fabht';
+import { Bia } from '../../objects/bia';
 
 export class FabhtPhysics {
 
   applyRandomMovement(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
     // Speed Variation
-    let variation = .3;
+    let variation = .1;
 
     tweens.add({
       targets: current.body.velocity,
@@ -35,8 +36,33 @@ export class FabhtPhysics {
     this.moveToTarget(current, mostAttractive, tweens);
   }
 
-  applyHunt(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
-    // this.moveToTarget(current, closestFoodSource, tweens);
+  stop(fabht: Fabht, tweens: Phaser.Tweens.TweenManager) {
+    tweens.add({
+      targets: fabht.body.velocity,
+      x: 0,
+      y: 0,
+      duration: 1000,
+      ease: 'Linear',
+    });
+  }
+
+  applyForage(objects: Array<any>, fabht: Fabht, tweens: Phaser.Tweens.TweenManager) {
+    let naBia = objects.filter((object: any) => { return object instanceof Bia });
+
+    if(naBia.length == 0) {
+      return false;
+    }
+
+    // Faigh an fabht is tarraingtí
+    let closestFood = naBia.reduce((prev, current) => {
+      return (this.getDistanceBetweenObjects(prev, fabht) < this.getDistanceBetweenObjects(current, fabht)) ? prev : current;
+    });
+
+    if(fabht.id == 1){
+      console.log(closestFood.x, closestFood.y)
+    }
+
+    this.moveToTarget(fabht, closestFood, tweens)
   }
 
   moveToTarget(current: Fabht, target: any, tweens: Phaser.Tweens.TweenManager) {
@@ -66,6 +92,12 @@ export class FabhtPhysics {
       duration: distance / desiredSpeed,
       ease: 'Linear',
     });
+  }
+
+  getDistanceBetweenObjects(object1: any, object2: any) {
+    const distanceX = object1.x - object2.x;
+    const distanceY = object1.y - object2.y;
+    return Math.sqrt(distanceX * distanceX + distanceY * distanceY);
   }
 
   isOverXVelocityLimit(current: Fabht) {

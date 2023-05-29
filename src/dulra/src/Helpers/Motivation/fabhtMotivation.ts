@@ -4,12 +4,12 @@ export class fabhtMotivation {
 
   public FOOD = 'food';
   public REPRODUCTION = 'reproduction';
-  
+
   public STATE_HUNTING = 'hunting';
   public STATE_IDLE = 'idle';
 
   determineNeed(current: Fabht) : string {
-    if(current.fullness > 40) {
+    if(current.fullness > 80) {
       return this.REPRODUCTION;
     }
 

@@ -39,6 +39,10 @@ export class MainScene extends Phaser.Scene {
       }, this));
     }
 
+    this.naFabhtRead.forEach(fabht => {
+      this.physics.world.enable(fabht);
+    });
+
     for (var i=1;i<=10; i++) {
       this.naBiaRead.push(new Bia({
         x: Phaser.Math.Between(0, Number(this.game.config.width)),
@@ -47,6 +51,12 @@ export class MainScene extends Phaser.Scene {
         attraction: 10,
       }, this));
     }
+
+    this.naBiaRead.forEach(bia => {
+      this.physics.world.enable(bia);
+    });
+
+    this.physics.add.collider(this.naFabhtRead, this.naBiaRead, this.handleCollision, null, this);
   }
 
   getRandomColor() {
@@ -61,6 +71,11 @@ export class MainScene extends Phaser.Scene {
     if (this.timeElapsed >= 2000) {
       this.timeElapsed = 0;
     }
+  }
+
+  handleCollision(fabht: Fabht, bia: Bia) {
+    fabht.fullness += 50;
+    bia.destroy();
   }
 
 }

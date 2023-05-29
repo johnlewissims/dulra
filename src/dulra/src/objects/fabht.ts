@@ -10,6 +10,7 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
   public speed: number;
   public fullness: number = 100;
   public state: string = 'idle';
+  public dead: boolean = false;
   private timeElapsedSinceFabhtAttraction: number = 0;
   private timeElapsedSinceRandomMovement: number = 0;
   private fabhtPhysics: FabhtPhysics = new FabhtPhysics();
@@ -24,6 +25,7 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     this.yVelocity = aParams.yVelocity;
     this.attractionForce = aParams.attraction ?? 0;
     this.speed = aParams.speed ?? 0;
+    this.dead = false;
 
     this.initSprite();
     this.initPhysics();
@@ -34,6 +36,10 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
   }
 
   update(time: number, delta: number) {
+    if(this.dead) {
+      return;
+    }
+
     super.update();
     this.timeElapsedSinceFabhtAttraction += delta;
     this.timeElapsedSinceRandomMovement += delta;
@@ -50,12 +56,21 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     const randomTime = Phaser.Math.Between(500, 3000);
     if (this.timeElapsedSinceFabhtAttraction >= randomTime) {
       this.timeElapsedSinceFabhtAttraction = 0;
-      this.fullness -= 5;
+
+      if(this.fullness <= 0) {
+        this.fabhtPhysics.stop(this, this.scene.tweens);
+        return;
+      } else {
+        this.fullness -= 5;
+      }
 
       if(this.fabhtMotivation.determineNeed(this) == 'reproduction') {
         this.fabhtPhysics.applyAttraction(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
       } else if(this.fabhtMotivation.determineNeed(this) == 'food') {
-        //this.fabhtPhysics.applyHunt(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+        let foraging = this.fabhtPhysics.applyForage(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+        if(!foraging) {
+          this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+        }
       } else {
         this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
       }
@@ -71,5 +86,11 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     this.body.setVelocity(this.xVelocity, this.yVelocity);
     this.body.setBounce(1, 1);
     this.body.setCollideWorldBounds(true);
+  }
+
+  private log(){
+    if(this.id == 1) {
+      console.log(this.fabhtMotivation.determineNeed(this), this.fullness);
+    }
   }
 }
