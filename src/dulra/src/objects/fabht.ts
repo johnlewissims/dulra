@@ -6,7 +6,10 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
   private xVelocity: number;
   private yVelocity: number;
   public attractionForce: number;
+  public speed: number;
   private fabhtPhysics: FabhtPhysics = new FabhtPhysics();
+  private timeElapsedSinceFabhtAttraction: number = 0;
+  private timeElapsedSinceRandomMovement: number = 0;
 
   body: Phaser.Physics.Arcade.Body;
 
@@ -15,7 +18,8 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     this.id = aParams.id;
     this.xVelocity = aParams.xVelocity;
     this.yVelocity = aParams.yVelocity;
-    this.attractionForce = aParams.attraction;
+    this.attractionForce = aParams.attraction ?? 0;
+    this.speed = aParams.speed ?? 0;
 
     this.initSprite();
     this.initPhysics();
@@ -25,9 +29,21 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     this.body.setCollideWorldBounds(true);
   }
 
-  update() {
+  update(time: number, delta: number) {
     super.update();
-    this.fabhtPhysics.applyAttraction(this.scene.sys.displayList.getChildren(), this);
+    this.timeElapsedSinceFabhtAttraction += delta;
+    this.timeElapsedSinceRandomMovement += delta;
+
+    if (this.timeElapsedSinceRandomMovement >= 100) {
+      this.timeElapsedSinceRandomMovement = 0;
+      this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+    }
+
+    const randomTime = Phaser.Math.Between(500, 3000);
+    if (this.timeElapsedSinceFabhtAttraction >= randomTime) {
+      this.timeElapsedSinceFabhtAttraction = 0;
+      this.fabhtPhysics.applyAttraction(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+    }
   } 
 
   private initSprite() {

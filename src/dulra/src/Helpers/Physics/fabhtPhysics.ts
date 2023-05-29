@@ -2,43 +2,54 @@ import { Body } from 'matter';
 import { Fabht } from '../../objects/fabht';
 
 export class FabhtPhysics {
-  applyAttraction(objects: Array<Body>, current: Fabht) {
-    objects.forEach((object: any) => {
-      if (object !== current && object instanceof Fabht) {
 
-        const direction = new Phaser.Math.Vector2(
-          object.x - current.x,
-          object.y - current.y
-        ).normalize();
-    
-        const attractionVector = direction.scale(current.attractionForce);
-        current.body.setAcceleration(attractionVector.x, attractionVector.y);
-        
-        // if (distance < 5) {
-        //   // Calculate the new velocities for the colliding rectangles
-        //   const velocityA = new Phaser.Math.Vector2(current.body.velocity.x, current.body.velocity.y);
-        //   const velocityB = new Phaser.Math.Vector2(object.body.velocity.x, object.body.velocity.y);
-
-        //   // Swap velocities
-        //   current.body.setVelocity(velocityB.x, velocityB.y);
-        //   object.body.setVelocity(velocityA.x, velocityA.y);
-        // }
-      }
-    });
+  applyRandomMovement(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
+      let randomVelocity1X = Phaser.Math.Between(-10, 10);
+      let randomVelocity1Y = Phaser.Math.Between(-10, 10);
+  
+      tweens.add({
+        targets: current.body.velocity,
+        x: current.body.velocity.x + randomVelocity1X,
+        y: current.body.velocity.y + randomVelocity1Y,
+        duration: 1,
+        ease: 'Linear',
+      });
   }
 
-  varySpeed(naFabhtRead: Array<Fabht>, tweens: Phaser.Tweens.TweenManager) {
-    naFabhtRead.forEach(fabht => {
-        const randomVelocity1X = Phaser.Math.Between(-50, 50);
-        const randomVelocity1Y = Phaser.Math.Between(-50, 50)
-        
-        tweens.add({
-          targets: fabht.body.velocity,
-          x: randomVelocity1X,
-          y: randomVelocity1Y,
-          duration: 1000,
-          ease: 'Linear',
-        });
-    });    
+  applyAttraction(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
+    console.log('applyAttraction');
+    let naFabht = objects.filter((object: any) => { return object instanceof Fabht && object !== current });
+  
+    // Faigh an fabht is tarraingtí
+    let mostAttractive = naFabht.reduce(function(prev, current) {
+      return (prev.attractionForce > current.attractionForce) ? prev : current
+    });
+  
+    const desiredSpeed = current.speed;
+    const targetX = mostAttractive.x;
+    const targetY = mostAttractive.y;
+  
+    const distanceX = targetX - current.x;
+    const distanceY = targetY - current.y;
+    const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+  
+    let velocityX = (distanceX / distance) * desiredSpeed;
+    let velocityY = (distanceY / distance) * desiredSpeed;
+  
+    if (Math.abs(velocityX) > desiredSpeed) {
+      velocityX *= desiredSpeed / Math.abs(velocityX);
+    }
+
+    if (Math.abs(velocityY) > desiredSpeed) {
+      velocityY *= desiredSpeed / Math.abs(velocityY);
+    }
+
+    tweens.add({
+      targets: current.body.velocity,
+      x: velocityX,
+      y: velocityY,
+      duration: distance / desiredSpeed,
+      ease: 'Linear',
+    });
   }
 }

@@ -8,4 +8,5 @@ export interface FabhtConstructor {
   xVelocity: number;
   yVelocity: number;
   attraction: number;
+  speed: number;
 }

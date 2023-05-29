@@ -20,6 +20,7 @@ export class MainScene extends Phaser.Scene {
 
   create(): void {
     for (const [key, fabht] of Object.entries(this.naFabht)) {
+      if(key == 'default') continue;
       this.naFabhtRead.push(new Fabht({
         id: fabht.id,
         x: fabht.x,
@@ -29,8 +30,9 @@ export class MainScene extends Phaser.Scene {
         fillColor: fabht.fillColor,
         xVelocity: fabht.xVelocity,
         yVelocity: fabht.yVelocity,
-        attraction: fabht.attraction
-      }, this,));
+        attraction: fabht.attraction,
+        speed: fabht.speed
+      }, this));
     }
   }
 
@@ -39,7 +41,6 @@ export class MainScene extends Phaser.Scene {
 
     if (this.timeElapsed >= 2000) {
       this.timeElapsed = 0;
-      this.fabhtPhysics.varySpeed(this.naFabhtRead, this.tweens);
     }
   }
 
