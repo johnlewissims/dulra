@@ -4,30 +4,45 @@ import { Fabht } from '../../objects/fabht';
 export class FabhtPhysics {
 
   applyRandomMovement(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
-      let randomVelocity1X = Phaser.Math.Between(-10, 10);
-      let randomVelocity1Y = Phaser.Math.Between(-10, 10);
-  
-      tweens.add({
-        targets: current.body.velocity,
-        x: current.body.velocity.x + randomVelocity1X,
-        y: current.body.velocity.y + randomVelocity1Y,
-        duration: 1,
-        ease: 'Linear',
-      });
+    // Speed Variation
+    let variation = .3;
+
+    tweens.add({
+      targets: current.body.velocity,
+      x: current.body.velocity.x + (Phaser.Math.Between(-current.speed, current.speed) * variation),
+      y: current.body.velocity.y + (Phaser.Math.Between(-current.speed, current.speed) * variation),
+      duration: 1,
+      ease: 'Linear',
+    });
+  }
+
+  slowDownSquare(square: Fabht) {
+    const slowdownPercentage = 0.15;
+
+    const slowdownFactor = (square.body.velocity.x >= 0) ? (1 - slowdownPercentage) : (1 + slowdownPercentage);
+    square.body.velocity.x *= slowdownFactor;
+    square.body.velocity.y *= slowdownFactor;
   }
 
   applyAttraction(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
-    console.log('applyAttraction');
     let naFabht = objects.filter((object: any) => { return object instanceof Fabht && object !== current });
   
     // Faigh an fabht is tarraingtí
     let mostAttractive = naFabht.reduce(function(prev, current) {
       return (prev.attractionForce > current.attractionForce) ? prev : current
     });
-  
+
+    this.moveToTarget(current, mostAttractive, tweens);
+  }
+
+  applyHunt(objects: Array<any>, current: Fabht, tweens: Phaser.Tweens.TweenManager) {
+    // this.moveToTarget(current, closestFoodSource, tweens);
+  }
+
+  moveToTarget(current: Fabht, target: any, tweens: Phaser.Tweens.TweenManager) {
     const desiredSpeed = current.speed;
-    const targetX = mostAttractive.x;
-    const targetY = mostAttractive.y;
+    const targetX = target.x;
+    const targetY = target.y;
   
     const distanceX = targetX - current.x;
     const distanceY = targetY - current.y;
@@ -51,5 +66,13 @@ export class FabhtPhysics {
       duration: distance / desiredSpeed,
       ease: 'Linear',
     });
+  }
+
+  isOverXVelocityLimit(current: Fabht) {
+    return current.body.velocity.x > current.speed;
+  }
+
+  isOverYVelocityLimit(current: Fabht) {
+    return current.body.velocity.x > current.speed;
   }
 }

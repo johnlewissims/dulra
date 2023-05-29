@@ -1,5 +1,6 @@
 import { FabhtConstructor } from '../interfaces/fabht.interface';
 import { FabhtPhysics } from '../Helpers/Physics/fabhtPhysics';
+import { fabhtMotivation } from '../Helpers/Motivation/fabhtMotivation';
 
 export class Fabht extends Phaser.GameObjects.Rectangle {
   public id: number;
@@ -7,9 +8,12 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
   private yVelocity: number;
   public attractionForce: number;
   public speed: number;
-  private fabhtPhysics: FabhtPhysics = new FabhtPhysics();
+  public fullness: number = 100;
+  public state: string = 'idle';
   private timeElapsedSinceFabhtAttraction: number = 0;
   private timeElapsedSinceRandomMovement: number = 0;
+  private fabhtPhysics: FabhtPhysics = new FabhtPhysics();
+  private fabhtMotivation: fabhtMotivation = new fabhtMotivation();
 
   body: Phaser.Physics.Arcade.Body;
 
@@ -26,7 +30,7 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     this.scene.add.existing(this);
     scene.events.on('update', this.update, this);
 
-    this.body.setCollideWorldBounds(true);
+    this.body.setCollideWorldBounds(true, .6);
   }
 
   update(time: number, delta: number) {
@@ -37,12 +41,24 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
     if (this.timeElapsedSinceRandomMovement >= 100) {
       this.timeElapsedSinceRandomMovement = 0;
       this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+
+      if(this.fabhtPhysics.isOverXVelocityLimit || this.fabhtPhysics.isOverYVelocityLimit) {
+        this.fabhtPhysics.slowDownSquare(this);
+      }
     }
 
     const randomTime = Phaser.Math.Between(500, 3000);
     if (this.timeElapsedSinceFabhtAttraction >= randomTime) {
       this.timeElapsedSinceFabhtAttraction = 0;
-      this.fabhtPhysics.applyAttraction(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+      this.fullness -= 5;
+
+      if(this.fabhtMotivation.determineNeed(this) == 'reproduction') {
+        this.fabhtPhysics.applyAttraction(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+      } else if(this.fabhtMotivation.determineNeed(this) == 'food') {
+        //this.fabhtPhysics.applyHunt(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+      } else {
+        this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
+      }
     }
   } 
 
