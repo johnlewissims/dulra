@@ -46,16 +46,20 @@ export class Fabht extends Phaser.GameObjects.Rectangle {
 
     if (this.timeElapsedSinceRandomMovement >= 100) {
       this.timeElapsedSinceRandomMovement = 0;
-      this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
 
       if(this.fabhtPhysics.isOverXVelocityLimit || this.fabhtPhysics.isOverYVelocityLimit) {
         this.fabhtPhysics.slowDownSquare(this);
+      } else {
+        this.fabhtPhysics.applyRandomMovement(this.scene.sys.displayList.getChildren(), this, this.scene.tweens);
       }
     }
 
     const randomTime = Phaser.Math.Between(500, 3000);
     if (this.timeElapsedSinceFabhtAttraction >= randomTime) {
       this.timeElapsedSinceFabhtAttraction = 0;
+
+      this.rotation += Math.PI / Phaser.Math.FloatBetween(1, 2);
+      this.fabhtPhysics.rotate(this, Phaser.Math.RadToDeg(this.rotation), this.scene.tweens);
 
       if(this.fullness <= 0) {
         this.fabhtPhysics.stop(this, this.scene.tweens);

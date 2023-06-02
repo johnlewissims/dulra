@@ -21,7 +21,7 @@
         "xVelocity": 0,
         "yVelocity": -0,
         "attraction": 3000,
-        "speed": 50
+        "speed": 70
     },
     {
         "id": 2,
@@ -33,6 +33,6 @@
         "xVelocity": -0,
         "yVelocity": -0,
         "attraction": 300,
-        "speed": 20
+        "speed": 80
     }
 ]

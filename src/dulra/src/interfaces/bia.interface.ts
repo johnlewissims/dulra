@@ -3,4 +3,5 @@ export interface BiaConstructor {
   y: number;
   fillColor: string;
   attraction: number;
+  nutrition: number;
 }

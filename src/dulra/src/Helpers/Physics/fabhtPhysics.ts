@@ -58,11 +58,8 @@ export class FabhtPhysics {
       return (this.getDistanceBetweenObjects(prev, fabht) < this.getDistanceBetweenObjects(current, fabht)) ? prev : current;
     });
 
-    if(fabht.id == 1){
-      console.log(closestFood.x, closestFood.y)
-    }
-
     this.moveToTarget(fabht, closestFood, tweens)
+    return true;
   }
 
   moveToTarget(current: Fabht, target: any, tweens: Phaser.Tweens.TweenManager) {
@@ -106,5 +103,17 @@ export class FabhtPhysics {
 
   isOverYVelocityLimit(current: Fabht) {
     return current.body.velocity.x > current.speed;
+  }
+
+  rotate(current: Fabht, angle: number, tweens: Phaser.Tweens.TweenManager): void {
+    tweens.add({
+      targets: current,
+      angle: angle,
+      duration: 1000,
+      ease: 'Linear',
+      onUpdate: () => {
+        current.setRotation(Phaser.Math.DegToRad(current.angle));
+      }
+    });
   }
 }

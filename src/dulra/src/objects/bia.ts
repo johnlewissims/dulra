@@ -3,6 +3,7 @@ import { BiaConstructor } from '../interfaces/bia.interface';
 export class Bia extends Phaser.GameObjects.Arc {
   public attractionForce: number;
   public speed: number;
+  public nutrition: number;
 
   body: Phaser.Physics.Arcade.Body;
 

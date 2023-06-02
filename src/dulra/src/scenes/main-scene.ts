@@ -49,6 +49,7 @@ export class MainScene extends Phaser.Scene {
         y: Phaser.Math.Between(0, Number(this.game.config.height)),
         fillColor: this.getRandomColor(),
         attraction: 10,
+        nutrition: Phaser.Math.Between(10, 50)
       }, this));
     }
 
@@ -56,7 +57,7 @@ export class MainScene extends Phaser.Scene {
       this.physics.world.enable(bia);
     });
 
-    this.physics.add.collider(this.naFabhtRead, this.naBiaRead, this.handleCollision, null, this);
+    this.physics.add.collider(this.naFabhtRead, this.naBiaRead, this.handleEat, null, this);
   }
 
   getRandomColor() {
@@ -73,9 +74,25 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
-  handleCollision(fabht: Fabht, bia: Bia) {
-    fabht.fullness += 50;
+  handleEat(fabht: Fabht, bia: Bia) {
+    fabht.fullness += bia.nutrition;
     bia.destroy();
+    this.addBia();
+  }
+
+  addBia() {
+    let biaNua = new Bia({
+      x: Phaser.Math.Between(0, Number(this.game.config.width)),
+      y: Phaser.Math.Between(0, Number(this.game.config.height)),
+      fillColor: this.getRandomColor(),
+      attraction: 10,
+      nutrition: Phaser.Math.Between(5, 15)
+    }, this)
+
+    this.physics.world.enable(biaNua);
+    this.naBiaRead.push(biaNua);
+
+    this.physics.add.collider(this.naFabhtRead, this.naBiaRead, this.handleEat, null, this);
   }
 
 }
